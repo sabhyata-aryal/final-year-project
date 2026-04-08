@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Result</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 32px 16px 48px;
+        }
+
+        .hero,
+        .panel {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 2.4rem;
+            color: #0f766e;
+            margin: 0.5rem 0 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            text-decoration: none;
+            padding: 0.85rem 1.2rem;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: #0f766e;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>Latest Scan Result</h1>
+            {% if result is not None %}
+            <p><strong>Submitted Document:</strong> {{ report1_name }}</p>
+            <p><strong>Teacher Repository Documents:</strong> {{ repository_size }}</p>
+            <p class="score">{{ result }}%</p>
+            {% else %}
+            <p>No scan result is available yet. Upload a file through the scan page first.</p>
+            {% endif %}
+
+            <div class="actions">
+                <a class="btn btn-primary" href="{% url 'scan_document' %}">Scan Another Document</a>
+                <a class="btn btn-secondary" href="{% url 'dashboard_redirect' %}">Back to Dashboard</a>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Detailed Comparison</h2>
+            {% if similarity_table %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Repository Report</th>
+                        <th>Similarity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in similarity_table %}
+                    <tr>
+                        <td>{{ item.past_report_name }}</td>
+                        <td>{{ item.similarity }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No repository reports were available for comparison.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCCS Plagiarism Detection System</title>
+    <style>
+        :root {
+            --nccs-purple: #4d0aa8;
+            --nccs-violet: #6d13b8;
+            --nccs-magenta: #b40f88;
+            --nccs-pink: #dd0f7a;
+            --nccs-deep: #2a0a73;
+            --nccs-white: #ffffff;
+            --text: #1f2340;
+            --muted: #5f6482;
+            --page: #f4f2fb;
+            --panel: #ffffff;
+            --line: rgba(255, 255, 255, 0.22);
+            --shadow: 0 24px 60px rgba(52, 19, 97, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(180, 15, 136, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(77, 10, 168, 0.12), transparent 30%),
+                var(--page);
+        }
+
+        .nccs-header {
+            color: var(--nccs-white);
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.06) 18%, transparent 18%) 0 0/180px 180px,
+                linear-gradient(35deg, rgba(255, 255, 255, 0.06) 16%, transparent 16%) 0 0/240px 240px,
+                linear-gradient(120deg, var(--nccs-pink), var(--nccs-magenta) 28%, var(--nccs-violet) 60%, var(--nccs-deep));
+            box-shadow: var(--shadow);
+        }
+
+        .topbar {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 1rem 1rem 1.25rem;
+        }
+
+        .brand-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.3rem;
+        }
+
+        .brand {
+            color: var(--nccs-white);
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            font-size: clamp(1rem, 4vw, 3rem);
+            line-height: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.08em;
+        }
+
+        .brand-sub {
+            margin-top: 0.45rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .nav-row a {
+            color: var(--nccs-white);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem;
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .hero-main {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 28px;
+            padding: clamp(2rem, 4vw, 3.1rem);
+            background: rgba(22, 9, 69, 0.22);
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            margin: 1rem 0;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 1.05;
+            text-wrap: balance;
+        }
+
+        .hero-main p {
+            max-width: 46rem;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1.05rem;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-top: 1.7rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 165px;
+            padding: 0.95rem 1.3rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            color: #2c0f62;
+            background: var(--nccs-white);
+        }
+
+        .btn-secondary {
+            color: var(--nccs-white);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.34);
+        }
+
+        .btn-accent {
+            color: var(--nccs-white);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 14px 30px rgba(36, 8, 95, 0.2);
+        }
+
+        .hero-side {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .mini-stat {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+            border-radius: 22px;
+            padding: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .mini-stat strong {
+            display: block;
+            margin-top: 0.3rem;
+            font-size: 2rem;
+            color: var(--nccs-violet);
+        }
+
+        .main-content {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .message-list {
+            max-width: 1240px;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
+        }
+
+        .message {
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            background: #fff2f8;
+            color: #8f155e;
+            border: 1px solid #f3b2d4;
+        }
+
+        .section-card {
+            background: var(--panel);
+            border-radius: 24px;
+            padding: 1.7rem;
+            box-shadow: 0 18px 40px rgba(50, 29, 92, 0.1);
+        }
+
+        .section-card h2 {
+            margin-top: 0;
+            color: #4e1489;
+        }
+
+        .section-card p,
+        .section-card li {
+            color: var(--muted);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        footer {
+            padding: 1.6rem 1rem 2.4rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .hero,
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-row {
+                justify-content: flex-start;
+                gap: 1rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .brand-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="nccs-header">
+        <div class="topbar">
+            <div class="brand-row">
+                <a class="brand" href="{% url 'home' %}">
+                    <div class="brand-mark">Plagiarism Checker of NCCS</div>
+                </a>
+            </div>
+
+            <nav class="nav-row">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="#about">About</a>
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'dashboard_redirect' %}">Dashboard</a>
+                <a href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+            </nav>
+        </div>
+
+        <section class="hero">
+            <div class="hero-main">
+                <h1>NCCS Plagiarism Detection System</h1>
+                <p>
+                    Role-based plagiarism detection built for NCCS with protected teacher uploads,
+                    temporary student scans, and repository-driven comparison results.
+                </p>
+                <div class="cta-row">
+                    <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+                    <a class="btn btn-secondary" href="{% url 'register' %}">Register</a>
+                    <a class="btn btn-accent" href="{% url 'landing_scan_redirect' %}">Scan Document</a>
+                </div>
+            </div>
+
+            <aside class="hero-side">
+                <div class="mini-stat">
+                    <span>Total Reports Uploaded</span>
+                    <strong>{{ total_reports_uploaded }}</strong>
+                </div>
+                <div class="mini-stat">
+                    <span>Repository Size</span>
+                    <strong>{{ repository_size }}</strong>
+                </div>
+                <div class="mini-stat">
+                    <span>Reports Checked</span>
+                    <strong>{{ reports_checked }}</strong>
+                </div>
+                <div class="mini-stat">
+                    <span>Plagiarism Cases Detected</span>
+                    <strong>{{ plagiarism_cases_detected }}</strong>
+                </div>
+            </aside>
+        </section>
+    </header>
+
+    {% if messages %}
+    <section class="message-list">
+        {% for message in messages %}
+        <div class="message">{{ message }}</div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <main class="main-content">
+        <section id="about" class="section-card">
+            <h2>About</h2>
+            <p>
+                This system follows the NCCS institutional flow for plagiarism checking.
+                Teachers maintain the official comparison repository, while students can perform secure temporary scans.
+            </p>
+        </section>
+
+        <section class="two-col">
+            <article class="section-card">
+                <h2>Teacher Access</h2>
+                <ul>
+                    <li>Upload documents to the permanent repository.</li>
+                    <li>Scan documents against stored teacher uploads.</li>
+                    <li>View repository reports and scan results.</li>
+                </ul>
+            </article>
+
+            <article class="section-card">
+                <h2>Student Access</h2>
+                <ul>
+                    <li>Scan documents temporarily without storing them in the database.</li>
+                    <li>View the latest personal scan result from the dashboard.</li>
+                    <li>Use the same plagiarism comparison engine as teachers.</li>
+                </ul>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 NCCS Plagiarism Detection System
+    </footer>
+</body>
+</html>
