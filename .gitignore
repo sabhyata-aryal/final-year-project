@@ -25,3 +25,10 @@ Thumbs.db
 *.pdf
 *.docx
 *.txt
+
+# Images / diagrams
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
