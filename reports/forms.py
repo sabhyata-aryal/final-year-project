@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
 from .models import Report, UserProfile
-from .utils import validate_unique_past_report
+from .utils import validate_supported_file_type, validate_unique_past_report
 
 
 def build_unique_username(email):
@@ -20,8 +20,8 @@ def build_unique_username(email):
 
 class RegistrationForm(forms.ModelForm):
     role = forms.ChoiceField(choices=UserProfile.ROLE_CHOICES)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -70,6 +70,11 @@ class TeacherUploadForm(forms.ModelForm):
         model = Report
         fields = ['title', 'file']
 
+    def clean_file(self):
+        uploaded_file = self.cleaned_data['file']
+        validate_supported_file_type(uploaded_file.name)
+        return uploaded_file
+
     def clean(self):
         cleaned_data = super().clean()
         uploaded_file = cleaned_data.get('file')
@@ -84,3 +89,8 @@ class TeacherUploadForm(forms.ModelForm):
 class ScanDocumentForm(forms.Form):
     title = forms.CharField(max_length=255, required=False)
     file = forms.FileField()
+
+    def clean_file(self):
+        uploaded_file = self.cleaned_data['file']
+        validate_supported_file_type(uploaded_file.name)
+        return uploaded_file

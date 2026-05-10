@@ -22,10 +22,40 @@ def get_user_role(user):
     return getattr(getattr(user, 'profile', None), 'role', None)
 
 
+def get_similarity_classification(score):
+    if score is None:
+        return {
+            'label': 'No Classification',
+            'badge_class': 'badge-none',
+        }
+
+    if score <= 20:
+        return {
+            'label': 'Low (0-20%)',
+            'badge_class': 'badge-low',
+        }
+
+    if score <= 40:
+        return {
+            'label': 'Moderate (21-40%)',
+            'badge_class': 'badge-moderate',
+        }
+
+    if score <= 70:
+        return {
+            'label': 'High (41-70%)',
+            'badge_class': 'badge-high',
+        }
+
+    return {
+        'label': 'Very High (71-100%)',
+        'badge_class': 'badge-very-high',
+    }
+
+
 def build_similarity_result(submitted_name, submitted_text):
     past_reports = Report.objects.filter(report_type='past')
     similarity_table = []
-    highest_similarity = 0
 
     for past_report in past_reports:
         similarity_percentage = calculate_jaccard_similarity(submitted_text, past_report.content)
@@ -33,11 +63,19 @@ def build_similarity_result(submitted_name, submitted_text):
             'past_report_name': past_report.file.name.split('/')[-1],
             'similarity': similarity_percentage,
         })
-        highest_similarity = max(highest_similarity, similarity_percentage)
+
+    similarity_table.sort(key=lambda item: item['similarity'], reverse=True)
+    highest_similarity = similarity_table[0]['similarity'] if similarity_table else None
+    if similarity_table:
+        similarity_table[0]['is_top_match'] = True
+
+    classification = get_similarity_classification(highest_similarity)
 
     return {
         'report1_name': submitted_name,
-        'result': highest_similarity if past_reports.exists() else None,
+        'result': highest_similarity,
+        'classification_label': classification['label'],
+        'classification_badge_class': classification['badge_class'],
         'similarity_table': similarity_table,
         'repository_size': past_reports.count(),
     }
@@ -226,6 +264,8 @@ def compare_reports(request):
         SCAN_RESULT_SESSION_KEY,
         {
             'result': None,
+            'classification_label': 'No Classification',
+            'classification_badge_class': 'badge-none',
             'report1_name': '',
             'similarity_table': [],
             'repository_size': Report.objects.filter(report_type='past').count(),

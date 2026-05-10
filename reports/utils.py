@@ -4,7 +4,18 @@ from PyPDF2 import PdfReader
 import docx
 from django.core.exceptions import ValidationError
 
+SUPPORTED_FILE_EXTENSIONS = {'.pdf', '.docx'}
+UNSUPPORTED_FILE_FORMAT_MESSAGE = 'Unsupported file format. Please upload a PDF or DOCX file.'
+
+
+def validate_supported_file_type(file_name):
+    extension = os.path.splitext(file_name)[1].lower()
+    if extension not in SUPPORTED_FILE_EXTENSIONS:
+        raise ValidationError(UNSUPPORTED_FILE_FORMAT_MESSAGE)
+
+
 def extract_text(file_path):
+    validate_supported_file_type(file_path)
     ext = os.path.splitext(file_path)[1].lower()
 
     if ext == '.pdf':
@@ -23,8 +34,7 @@ def extract_text(file_path):
         return text
 
     else:
-        # Unsupported format
-        return ''
+        raise ValidationError(UNSUPPORTED_FILE_FORMAT_MESSAGE)
 
 def generate_ngrams(text, n=4):
     # Convert to lowercase

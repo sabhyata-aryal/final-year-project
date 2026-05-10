@@ -1,28 +1,27 @@
+# Ignore reports folder
+nccs_plagiarism/media/reports/
+
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.env
+*.py[cod]
+
+# Virtual environment
 venv/
+.venv/
+.env
 
-# Node
-node_modules/
-npm-debug.log
+# SQLite database
+db.sqlite3
 
-# VS Code
-.vscode/
-
-# OS files
+# System files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
+# Editors
+.vscode/
+.idea/
 
-# Build
-dist/
-build/
-
-# Database
-*.sqlite3
+# Documents
+*.pdf
+*.docx
+*.txt

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCCS Plagiarism Detection System</title>
+    <title>NCCS Plagiarism System</title>
     <style>
         :root {
             --nccs-purple: #4d0aa8;
@@ -119,6 +119,7 @@
             font-size: clamp(2.2rem, 5vw, 4rem);
             line-height: 1.05;
             text-wrap: balance;
+            overflow-wrap: anywhere;
         }
 
         .hero-main p {
@@ -126,6 +127,7 @@
             margin: 0;
             color: rgba(255, 255, 255, 0.92);
             font-size: 1.05rem;
+            overflow-wrap: anywhere;
         }
 
         .cta-row {
@@ -234,9 +236,19 @@
         }
 
         footer {
-            padding: 1.6rem 1rem 2.4rem;
+            padding: 2rem 1rem 2.4rem;
             text-align: center;
-            color: var(--muted);
+            color: #f6ecff;
+            background: linear-gradient(120deg, var(--nccs-purple), var(--nccs-magenta) 55%, var(--nccs-violet));
+        }
+
+        .footer-title {
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        .footer-line {
+            margin: 0.2rem 0;
         }
 
         @media (max-width: 900px) {
@@ -252,9 +264,41 @@
         }
 
         @media (max-width: 640px) {
+            .topbar,
+            .hero,
+            .main-content,
+            .message-list {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
             .brand-row {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .brand-mark {
+                font-size: 1.6rem;
+            }
+
+            .nav-row {
+                gap: 0.7rem;
+            }
+
+            .nav-row a {
+                font-size: 0.8rem;
+            }
+
+            .hero-main,
+            .mini-stat,
+            .section-card {
+                border-radius: 18px;
+                padding: 18px;
+            }
+
+            .btn {
+                width: 100%;
+                min-width: 0;
             }
         }
     </style>
@@ -264,7 +308,7 @@
         <div class="topbar">
             <div class="brand-row">
                 <a class="brand" href="{% url 'home' %}">
-                    <div class="brand-mark">Plagiarism Checker of NCCS</div>
+                    <div class="brand-mark">NCCS Plagiarism System</div>
                 </a>
             </div>
 
@@ -282,7 +326,7 @@
 
         <section class="hero">
             <div class="hero-main">
-                <h1>NCCS Plagiarism Detection System</h1>
+                <h1>NCCS Plagiarism System</h1>
                 <p>
                     Role-based plagiarism detection built for NCCS with protected teacher uploads,
                     temporary student scans, and repository-driven comparison results.
@@ -354,7 +398,11 @@
     </main>
 
     <footer>
-        &copy; 2026 NCCS Plagiarism Detection System
+        <div class="footer-title">National College of Computer Studies</div>
+        <p class="footer-line">Paknajol, Kathmandu</p>
+        <p class="footer-line">Tel: 5351711, 5328807, 5368221, 5367866</p>
+        <p class="footer-line">Fax: 4269807</p>
+        <p class="footer-line">Email: info@nccs.edu.np</p>
     </footer>
 </body>
 </html>
