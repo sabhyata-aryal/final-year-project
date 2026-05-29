@@ -44,7 +44,7 @@ class Report(models.Model):
 
         hasher = hashlib.sha256()
 
-        # UploadedFile (e.g., InMemoryUploadedFile) supports chunks()
+        # UploadedFile
         if hasattr(self.file, 'chunks'):
             for chunk in self.file.chunks():
                 hasher.update(chunk)

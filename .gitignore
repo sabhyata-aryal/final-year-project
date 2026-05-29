@@ -21,10 +21,11 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Documents
+# Documents and ppt
 *.pdf
 *.docx
 *.txt
+*.pptx
 
 # Images / diagrams
 *.jpg
